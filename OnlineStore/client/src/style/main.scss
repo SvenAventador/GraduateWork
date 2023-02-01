@@ -7,6 +7,12 @@
 /*pages*/
 
 /*components*/
+@import "./components/header/_highHeader";
+@import "./components/header/lowHeader";
+@import "./components/main-page/mainCategories";
+@import "./components/main-page/topBrands";
+@import "./components/main-page/ourSocial";
+@import "./components/footer/footer";
 
 /*vendor*/
 @import "vendor";
