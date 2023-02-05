@@ -1,31 +1,29 @@
-import {makeAutoObservable} from "mobx";
+import {makeAutoObservable} from "mobx" // слежка за переменными, которые будут переданы в параметр функции
 
-export default class UserStore {
+export default class userStore {
+
     constructor() {
+
         this._isAuth = false
         this._user = {}
         makeAutoObservable(this)
+
     }
 
     setIsAuth(bool) {
         this._isAuth = bool
     }
+
     setUser(user) {
         this._user = user
     }
 
-    setRole(role){
-        this._role = role
-    }
-
-    get isAuth() {
+    get isAuth() { // гетеры для оптимизации переменных, которые были изменены
         return this._isAuth
     }
-    get user() {
+
+    get user() { // гетеры для оптимизации переменных, которые были изменены
         return this._user
     }
 
-    get role() {
-        return this._role
-    }
 }

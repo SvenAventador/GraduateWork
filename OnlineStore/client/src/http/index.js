@@ -5,7 +5,7 @@ import axios from 'axios'
  * Пример, авторизация.
  * @type {axios.AxiosInstance}
  */
-export const $host = axios.create({
+const $host = axios.create({
     baseURL: process.env.REACT_APP_API_URL
 })
 
@@ -15,7 +15,7 @@ export const $host = axios.create({
  * Пример, корзина.
  * @type {axios.AxiosInstance}
  */
-export const $authHost = axios.create({
+const $authHost = axios.create({
     baseURL: process.env.REACT_APP_API_URL
 })
 
@@ -24,8 +24,14 @@ export const $authHost = axios.create({
  * @param config - кофнфигурация.
  * @returns {string} - Заголоваок
  */
-const authInterceptors = config => {
-    return config.headers.authorization = `Bearer ${localStorage.getItem('token')}`
+const authInterceptor = config => {
+    config.headers.authorization = `Bearer ${localStorage.getItem('token')}`
+    return config
 }
 
-$authHost.interceptors.request.use(authInterceptors)
+$authHost.interceptors.request.use(authInterceptor)
+
+export {
+    $host,
+    $authHost
+}

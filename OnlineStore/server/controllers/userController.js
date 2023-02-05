@@ -19,10 +19,10 @@ class UserController {
     async registration (req, res, next) {
         const {userName, userEmail, userPassword, roleUser} = req.body
 
-        /*if (((!(Function.isString(userName))) || (Function.isEmpty(userName))) &&
-            ((!(Function.isString(userEmail))) || (Function.isString(userEmail))) &&
-            ((!(Function.isString(userPassword))) || (Function.isString(userPassword))) &&
-            ((!(Function.isString(roleUser))) || (Function.isString(roleUser)))) {
+        if (((!(Function.isString(userName))) || (Function.isEmpty(userName))) &&
+            ((!(Function.isString(userEmail))) || (Function.isEmpty(userEmail))) &&
+            ((!(Function.isString(userPassword))) || (Function.isEmpty(userPassword))) &&
+            ((!(Function.isString(roleUser))) || (Function.isEmpty(roleUser)))) {
             return next(ErrorHandler.badRequest("Неверный параметр запроса."))
         }
 
@@ -31,13 +31,18 @@ class UserController {
         }
 
         if (!(Function.validatePassword(userPassword))) {
-            return next(ErrorHandler.badRequest("Введенный Вами пароль не валиден ."))
+            return next(ErrorHandler.badRequest("Пароль должен содержать:\n" +
+                                                "1) Как минимум одну строчную букву.\n" +
+                                                "2) Как минимум одну заглавную букву.\n" +
+                                                "3) Как минимум одну цифру.\n" +
+                                                "4) Размер пароля должен быть от 8 до 15 символов.\n" +
+                                                "5) Раскладка исключительно латиницей."));
         }
 
         const candidateOnName = await User.findOne({where: {userName}})
         if (candidateOnName) {
             return next(ErrorHandler.badRequest("Пользователь с таким именем уже имеется в системе!"));
-        }*/
+        }
 
         const candidateOnEmail = await User.findOne({where: {userEmail}})
         if (candidateOnEmail) {
@@ -61,11 +66,10 @@ class UserController {
      * @returns {Promise<void>} - Объект.
      */
     async login (req, res, next) {
-        const {userName, userEmail, userPassword} = req.body
+        const {userEmail, userPassword} = req.body
 
-        if (((!(Function.isString(userName))) || (Function.isEmpty(userName))) &&
-            ((!(Function.isString(userEmail))) || (Function.isString(userEmail))) &&
-            ((!(Function.isString(userPassword))) || (Function.isString(userPassword)))) {
+        if (((!(Function.isString(userEmail))) || (Function.isEmpty(userEmail))) &&
+            ((!(Function.isString(userPassword))) || (Function.isEmpty(userPassword)))) {
             return next(ErrorHandler.badRequest("Неверный параметр запроса."))
         }
 
@@ -95,14 +99,10 @@ class UserController {
      * Генерация нового jwt-токена и отправка его на клиент.
      * @param req - запрос.
      * @param res - ответ.
-     * @param next - Передача управления следующему в цепочке Middleware.
      * @returns {Promise<void>} - Объект.
      */
-    async check (req, res, next) {
-        const jwt_token = Function.generateJwt(req.user.id,
-                                               req.user.userName,
-                                               req.user.userEmail,
-                                               req.user.roleUser)
+    async check (req, res) {
+        const jwt_token = Function.generateJwt(req.user.id, req.user.name, req.user.email, req.user.role)
         return res.json({jwt_token})
     }
 }

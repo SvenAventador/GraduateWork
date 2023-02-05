@@ -8,27 +8,26 @@ const jwt = require('jsonwebtoken')
  * @param next - Передача управления следующему в цепочке Middleware.
  */
 module.exports = function (req, res, next) {
-    if (req.methods === 'OPTIONS') { // так как для OPTIONS authorization не нужно, мы пропускаем его
+    if (req.method === "OPTIONS") {
         next()
     }
 
     try {
-
         /*
          * Тут происходит проверка валидности токена.
          * Обычно токены помещают в Header Authorization и хранят его в следующем формате: <тип токена> <токен>
          * Чтобы выцепить именно токен мы делаем split и берем первый элемент массива.
          * Пример: Bearer fnIDFIUndersign378
          * */
-
         const token = req.headers.authorization.split(' ')[1]
-        if (!(token)) {
-            return next(ErrorHandler.unauthorized("Данный пользователь не авторизирован."))
+
+        if (!token) {
+            return res.status(401).json({message: "Не авторизован"})
         }
 
-        const decoded_token = jwt.verify(token, process.env.SECRET_KEY)
-        req.user = decoded_token // TODO
-        next() // TODO
+        const decoded = jwt.verify(token, process.env.SECRET_KEY)
+        req.user = decoded
+        next()
 
     } catch (e) {
         return next(ErrorHandler.unauthorized("Данный пользователь не авторизирован."))

@@ -1,27 +1,61 @@
-import React, {useState} from 'react';
-import {NavLink, useLocation} from "react-router-dom";
+import React, {useContext, useState} from 'react';
+import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import {LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE} from "../utils/consts";
 import logo from "../resources/img/auth_logo/logo.png"
 import close from "../resources/img/auth_logo/btn_close.png"
 import {observer} from "mobx-react-lite";
-import {registration} from "../http/userAPI";
+import {login, registration} from "../http/userAPI";
+import Swal from 'sweetalert2'
+import {Context} from "../index";
 
 const Auth = observer(() => {
 
+    const {user} = useContext(Context)
+
     const location = useLocation()
+    const history = useNavigate()
     const isLogin = location.pathname === LOGIN_ROUTE
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [firstPassword, setFirstPassword] = useState('')
+    const [secondPassword, setSecondPassword] = useState('')
 
     /**
      * Функция для авторизации / регистрации по JWT-токену.
      * @returns {Promise<*[]>}
      */
     const reg_auth = async () => {
-        const response = await registration(name, email, password)
-        console.log(response)
+        try {
+            if (isLogin) {
+               await  login(email, firstPassword)
+            } else {
+                if (firstPassword === secondPassword) {
+                    await registration(name, email, firstPassword)
+                } else {
+                    return Swal.fire({
+                        icon: "error",
+                        title: "Ошибочка",
+                        text: "Пароли не совпадают"
+                    })
+                }
+            }
+
+            user.setUser(user)
+            user.setIsAuth(true)
+            history(SHOP_ROUTE)
+            return Swal.fire({
+                icon: "success",
+                title: "Успешно",
+                text: "Добро пожаловать!"
+            })
+        } catch (e) {
+            return Swal.fire({
+                icon: "error",
+                title: "Ошибочка",
+                text: e.response.data.message
+            })
+        }
     }
 
     return (
@@ -56,21 +90,23 @@ const Auth = observer(() => {
                     <div className="auth-form__text">
                         <input type="text"
                                value={email}
-                               onChange={e => setEmail(e.target.value)} />
+                               onChange={e => setEmail(e.target.value)}/>
                         <span></span>
                         <label>Электронная почта</label>
                     </div>
                     <div className="auth-form__text">
                         <input type="password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}/>
+                               value={firstPassword}
+                               onChange={e => setFirstPassword(e.target.value)}/>
                         <span></span>
                         <label>Пароль</label>
                     </div>
                     {
                         isLogin ?
                             <div>
-                                <button className={"auth-form__text--btn btn-reset"}>Войти в аккаунт</button>
+                                <button className={"auth-form__text--btn btn-reset"}
+                                        onClick={reg_auth}>Войти в аккаунт
+                                </button>
                                 <div className="auth-form__bottom--part grid">
                                     <label>Впервые у нас?</label>
                                     <NavLink to={REGISTRATION_ROUTE} className={"auth-form__bottom--part-link flex"}>
@@ -81,12 +117,15 @@ const Auth = observer(() => {
                             :
                             <div>
                                 <div className="auth-form__text">
-                                    <input type="password"/>
+                                    <input type="password"
+                                           value={secondPassword}
+                                           onChange={e => setSecondPassword(e.target.value)}/>
                                     <span></span>
                                     <label>Повторите пароль</label>
                                 </div>
 
-                                <button className={"auth-form__text--btn btn-reset"} onClick={reg_auth}>
+                                <button className={"auth-form__text--btn btn-reset"}
+                                        onClick={reg_auth}>
                                     Зарегистрироваться
                                 </button>
 

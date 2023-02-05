@@ -9,7 +9,6 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 export const Context = createContext(null) // инструмент управления состоянием,
                                                      // используемый для обмена данными между компонентами React
-console.log(process.env.REACT_APP_API_URL)
 
 root.render(
     <Context.Provider value={

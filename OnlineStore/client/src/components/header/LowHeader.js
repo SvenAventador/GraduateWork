@@ -1,12 +1,28 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import search from "../../resources/img/header_buttons/search.png"
 import auth from "../../resources/img/header_buttons/auth.png";
 import cart from "../../resources/img/header_buttons/cart.png";
 import {NavLink} from "react-router-dom";
 import {CART_ROUTE, LOGIN_ROUTE, SHOP_ROUTE} from "../../utils/consts";
+import {Context} from "../../index";
+import {observer} from "mobx-react-lite";
 
-const LowHeader = () => {
+const LowHeader = observer(() => {
 
+    const {user} = useContext(Context)
+
+    const logOut = () => {
+        user.setUser(false)
+        user.setIsAuth(false)
+    }
+
+    /**
+     * Функция получения имени.
+     * @returns {Promise<void>}
+     */
+    const parseJwt = () => {
+        return JSON.parse(atob(localStorage.getItem('token').split('.')[1])).name;
+    };
 
     return (
         <div className={"low-header flex"}>
@@ -42,16 +58,26 @@ const LowHeader = () => {
                 </div>
                 <div className={"low-header__cart--text"}>Корзина</div>
             </NavLink>
-
-            <NavLink className={"low-header__auth flex"} to={LOGIN_ROUTE}>
-                <div className={"low-header__auth--img"}>
-                    <img src={auth} alt="auth" aria-label={"auth"}/>
-                </div>
-                <div className={"low-header__auth--text"}>Войти</div>
-            </NavLink>
+            {
+                user._isAuth ?
+                    <button className={"low-header__auth flex btn-reset"}
+                            onClick={() => logOut()}>
+                        <div className={"low-header__auth--img"}>
+                            <img src={auth} alt="auth" aria-label={"auth"}/>
+                        </div>
+                        <div className={"low-header__auth--text"}>{user._isAuth ? parseJwt() : "Войти"}</div>
+                    </button>
+                    :
+                    <NavLink className={"low-header__auth flex"} to={LOGIN_ROUTE}>
+                        <div className={"low-header__auth--img"}>
+                            <img src={auth} alt="auth" aria-label={"auth"}/>
+                        </div>
+                        <div className={"low-header__auth--text"}>{user._isAuth ? parseJwt() : "Войти"}</div>
+                    </NavLink>
+            }
         </div>
 
     );
-};
+});
 
 export default LowHeader;
