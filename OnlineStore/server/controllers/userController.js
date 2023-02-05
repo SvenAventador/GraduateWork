@@ -19,7 +19,7 @@ class UserController {
     async registration (req, res, next) {
         const {userName, userEmail, userPassword, roleUser} = req.body
 
-        if (((!(Function.isString(userName))) || (Function.isEmpty(userName))) &&
+        /*if (((!(Function.isString(userName))) || (Function.isEmpty(userName))) &&
             ((!(Function.isString(userEmail))) || (Function.isString(userEmail))) &&
             ((!(Function.isString(userPassword))) || (Function.isString(userPassword))) &&
             ((!(Function.isString(roleUser))) || (Function.isString(roleUser)))) {
@@ -37,7 +37,7 @@ class UserController {
         const candidateOnName = await User.findOne({where: {userName}})
         if (candidateOnName) {
             return next(ErrorHandler.badRequest("Пользователь с таким именем уже имеется в системе!"));
-        }
+        }*/
 
         const candidateOnEmail = await User.findOne({where: {userEmail}})
         if (candidateOnEmail) {
