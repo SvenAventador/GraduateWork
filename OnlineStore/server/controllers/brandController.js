@@ -42,6 +42,18 @@ class BrandController {
 
         return res.json(brands)
     }
+
+    /**
+     * Получение одного бренда.
+     * @param req - запрос.
+     * @param res - ответ.
+     * @returns {Promise<*>}
+     */
+    async getOne(req, res) {
+        const {id} = req.params
+        const brandName = await Brand.findOne({where: {id}})
+        return res.json(brandName)
+    }
 }
 
 module.exports = new BrandController()

@@ -1,4 +1,4 @@
-const {Device, DeviceInfo} = require("../models/models");
+const {Device, DeviceInfo, Rating} = require("../models/models");
 const uuid = require('uuid') /*генерация случайного id*/
 const Functions = require('../validation/secondaryFunctions')
 const ErrorHandler = require("../error/errorHandler");
@@ -75,19 +75,19 @@ class DeviceController {
         let devices;
 
         if (!brandId && !typeId) {
-            devices = await Device.findAll({limit, offset})
+            devices = await Device.findAndCountAll({order: ['id'], limit, offset})
         }
 
         if (!brandId && typeId) {
-            devices = await Device.findAll({where: {typeId}, limit, offset})
+            devices = await Device.findAndCountAll({where: {typeId}, limit, offset})
         }
 
         if (brandId && !typeId) {
-            devices = await Device.findAll({where: {brandId}, limit, offset})
+            devices = await Device.findAndCountAll({where: {brandId}, limit, offset})
         }
 
         if (brandId && typeId) {
-            devices = await Device.findAll({where: {typeId, brandId}, limit, offset})
+            devices = await Device.findAndCountAll({where: {typeId, brandId}, limit, offset})
         }
 
         return res.json(devices)
@@ -110,6 +110,33 @@ class DeviceController {
         })
 
         return res.json(device)
+    }
+
+    /**
+     * Расчет средней оценки устройства.
+     * @param req - запрос.
+     * @returns {Promise<void>}
+     */
+    async calculateMark(req) {
+        try {
+            const {id} = req.params
+            const marksData = await Rating.findAll({where: {deviceId: id}})
+            const marks = marksData.map(mark => mark.dataValues.rate)
+            let resultMark = 0;
+
+            for (let i = 0; i < marks.length; i++) {
+                resultMark += marks[i]
+            }
+            resultMark = resultMark / marks.length
+
+            Device.update({rating: resultMark}, {where: {id}})
+                .then(() => {
+                    console.log('Рейтинг обновлён')
+                })
+
+        } catch (e) {
+            console.log(e)
+        }
     }
 }
 

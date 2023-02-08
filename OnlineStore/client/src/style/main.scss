@@ -6,6 +6,8 @@
 
 /*pages*/
 @import "./pages/auth";
+@import "./pages/shop";
+@import "./pages/device";
 
 /*components*/
 @import "./components/header/_highHeader";
@@ -13,6 +15,10 @@
 @import "./components/main-page/mainCategories";
 @import "./components/main-page/topBrands";
 @import "./components/main-page/ourSocial";
+@import "./components/shop-page/brandList";
+@import "./components/shop-page/deviceItem";
+@import "./components/shop-page/deviceList";
+@import "./components/shop-page/typeList";
 @import "./components/footer/footer";
 
 /*vendor*/

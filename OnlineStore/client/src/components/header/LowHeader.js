@@ -11,8 +11,11 @@ const LowHeader = observer(() => {
 
     const {user} = useContext(Context)
 
+    /**
+     * Функция выхода из аккаунта.
+     */
     const logOut = () => {
-        user.setUser(false)
+        user.setUser({})
         user.setIsAuth(false)
     }
 

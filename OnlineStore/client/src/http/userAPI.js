@@ -1,6 +1,5 @@
 import {$host, $authHost} from "./index";
 import jwt_decode from 'jwt-decode'
-import Swal from "sweetalert2";
 
 /**
  * Реализация функции регистрации из контроллера.

@@ -1,0 +1,45 @@
+.typebar {
+  height: max-content;
+  width: max-content;
+  border: 3px solid var(--bgColor);
+  margin-bottom: 30px;
+
+  &__h3--title {
+    text-align: center;
+    border-bottom: 2px solid var(--bgColor);
+    font-family: 'Play', sans-serif;
+    padding: 10px 30px;
+  }
+
+  &__list {
+
+    &--item {
+      text-align: left;
+      border-bottom: 1px solid var(--bgColor);
+      font-family: 'Play', sans-serif;
+      font-size: 25px;
+      padding: 5px 20px;
+      cursor: pointer;
+    }
+
+    &--item:nth-child(n + 5) {
+      display: none;
+    }
+  }
+
+  &__btn {
+    text-align: center;
+
+    &--show {
+      background-color: #56BDC5;
+      color: #FFFFFF;
+      border-radius: 30px;
+      padding: 10px 30px;
+      margin: 10px 0;
+    }
+  }
+}
+
+.typebar__list--item.is-visible {
+  display: block;
+}

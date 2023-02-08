@@ -1,8 +1,9 @@
 const Router = require('express')
-const router = new Router()
+const routes = new Router()
 const BrandController = require('../controllers/brandController')
 
-router.post('/', BrandController.create)
-router.get('/', BrandController.getAll)
+routes.post('/', BrandController.create)
+routes.get('/', BrandController.getAll)
+routes.get('/:id', BrandController.getOne)
 
-module.exports = router
+module.exports = routes
