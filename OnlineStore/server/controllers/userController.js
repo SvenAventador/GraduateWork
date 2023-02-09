@@ -19,11 +19,16 @@ class UserController {
     async registration (req, res, next) {
         const {userName, userEmail, userPassword, roleUser} = req.body
 
-        if (((!(Function.isString(userName))) || (Function.isEmpty(userName))) &&
-            ((!(Function.isString(userEmail))) || (Function.isEmpty(userEmail))) &&
-            ((!(Function.isString(userPassword))) || (Function.isEmpty(userPassword))) &&
-            ((!(Function.isString(roleUser))) || (Function.isEmpty(roleUser)))) {
-            return next(ErrorHandler.badRequest("Неверный параметр запроса."))
+        if ((!(Function.isString(userName))) || (Function.isEmpty(userName))) {
+            return next(ErrorHandler.badRequest("Некорректно указано имя пользователя."))
+        }
+
+        if ((!(Function.isString(userEmail))) || (Function.isEmpty(userEmail))) {
+            return next(ErrorHandler.badRequest("Некорректно указана почта пользователя."))
+        }
+
+        if ((!(Function.isString(userPassword))) || (Function.isEmpty(userPassword))) {
+            return next(ErrorHandler.badRequest("Некорректно указан пароль пользователя."))
         }
 
         if (!(Function.validateEmail(userEmail))) {
@@ -51,7 +56,7 @@ class UserController {
 
         const hashPassword = await bcrypt.hash(userPassword, 3) // асинхронное хеширование паролей в количестве 3-х раз
         const user = await User.create({userName, userEmail, userPassword: hashPassword, roleUser})
-        const cart = await Cart.create({userId: user.id})
+        await Cart.create({userId: user.id})
 
         const json_token = Function.generateJwt(user.id, user.userName, user.userEmail, user.roleUser)
         return res.json({json_token})
@@ -68,9 +73,12 @@ class UserController {
     async login (req, res, next) {
         const {userEmail, userPassword} = req.body
 
-        if (((!(Function.isString(userEmail))) || (Function.isEmpty(userEmail))) &&
-            ((!(Function.isString(userPassword))) || (Function.isEmpty(userPassword)))) {
-            return next(ErrorHandler.badRequest("Неверный параметр запроса."))
+        if ((!(Function.isString(userEmail))) || (Function.isEmpty(userEmail))) {
+            return next(ErrorHandler.badRequest("Некорректно указана почта пользователя."))
+        }
+
+        if ((!(Function.isString(userPassword))) || (Function.isEmpty(userPassword))) {
+            return next(ErrorHandler.badRequest("Некорректно указан пароль пользователя."))
         }
 
         if (!(Function.validateEmail(userEmail))) {
@@ -102,7 +110,10 @@ class UserController {
      * @returns {Promise<void>} - Объект.
      */
     async check (req, res) {
-        const jwt_token = Function.generateJwt(req.user.id, req.user.name, req.user.email, req.user.role)
+        const jwt_token = Function.generateJwt(req.user.id,
+                                               req.user.name,
+                                               req.user.email,
+                                               req.user.role)
         return res.json({jwt_token})
     }
 }

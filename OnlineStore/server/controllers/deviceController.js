@@ -17,20 +17,28 @@ class DeviceController {
      */
     async create (req, res, next) {
         try {
-            let {nameDevice, priceDevice, typeId, brandId, info, descr} = req.body
+            let {nameDevice, priceDevice, typeId, brandId, info, descriptionDevice} = req.body
             const {img} = req.files
             let fileName = uuid.v4() + ".jpg" /*v4 - генерирует id*/
 
-            if ((!Functions.isString(nameDevice) ||
-                  Functions.isEmpty(nameDevice)) ||
-                (!Functions.isNumber(priceDevice)) ||
-                (!Functions.isNumber(typeId)) ||
-                (!Functions.isNumber(brandId))) {
-                return next(ErrorHandler.badRequest('Не верный параметр запроса.'))
+            if ((!Functions.isString(nameDevice)) || Functions.isEmpty(nameDevice)) {
+                return next(ErrorHandler.badRequest('Некорректно указано название устройства.'))
+            }
+
+            if(!(Functions.isNumber(priceDevice))) {
+                return next(ErrorHandler.badRequest('Некорректно указана цена устройства.'))
+            }
+
+            if(!(Functions.isNumber(typeId))) {
+                return next(ErrorHandler.badRequest('Некорректно указан тип устройства.'))
+            }
+
+            if(!(Functions.isNumber(brandId))) {
+                return next(ErrorHandler.badRequest('Некорректно указан бренд устройства.'))
             }
 
             img.mv(path.resolve(__dirname, '..', 'static', fileName))
-            const device = await Device.create({nameDevice, priceDevice, img: fileName, descr, typeId, brandId})
+            const device = await Device.create({nameDevice, priceDevice, img: fileName, descriptionDevice, typeId, brandId})
 
             if (info) {
                 info = JSON.parse(info)
@@ -47,8 +55,6 @@ class DeviceController {
         } catch {
             next(ErrorHandler.internal('Неправильно обработан запрос.'))
         }
-
-
     }
 
     /**

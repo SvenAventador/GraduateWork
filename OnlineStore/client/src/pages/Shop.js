@@ -21,9 +21,6 @@ const Shop = observer(() => {
             })
         }
     }, [user.isAuth, userId, cart])
-
-    console.log(userId)
-
     useEffect(() => {
         getAllTypes().then(data => device.setType(data))
         getAllBrand().then(data => device.setBrand(data))

@@ -1,5 +1,7 @@
 const {Rating} = require('../models/models')
 const ApiError = require('../error/errorHandler');
+const Functions = require("../validation/secondaryFunctions");
+const ErrorHandler = require("../error/errorHandler");
 
 class RatingController {
 
@@ -13,6 +15,18 @@ class RatingController {
     async createRate(req, res, next) {
         try {
             const {userId, deviceId, rate} = req.body
+
+            if(!(Functions.isNumber(userId))) {
+                return next(ErrorHandler.badRequest('Некорректно указан идентификатор пользователя.'))
+            }
+
+            if(!(Functions.isNumber(deviceId))) {
+                return next(ErrorHandler.badRequest('Некорректно указан идентификатор устройства.'))
+            }
+
+            if(!(Functions.isNumber(rate))) {
+                return next(ErrorHandler.badRequest('Некорректно указан рейтинг устройства.'))
+            }
 
             const candidate = await Rating.findOne({where: {userId, deviceId}})
 

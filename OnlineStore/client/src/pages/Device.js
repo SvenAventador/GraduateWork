@@ -1,14 +1,12 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import start from '../resources/img/device/star.png'
 import hurt from '../resources/img/device/hurt.png'
 import {useParams} from "react-router-dom";
 import {getOneDevice} from "../http/deviceAPI";
 import {createCartItem} from "../http/cartAPI";
-import {Context} from "../index";
 import Swal from "sweetalert2";
 
 const Device = () => {
-    const {cart} = useContext(Context)
     const [device, setDevice] = useState({info: []})
     const {id} = useParams()
     const userId = parseInt(JSON.parse(atob(localStorage.getItem('token').split('.')[1])).id)
@@ -16,8 +14,6 @@ const Device = () => {
     useEffect(() => {
         getOneDevice(id).then(data => setDevice(data))
     }, [id])
-
-    console.log(userId, id)
 
     return (
         <div className={"phone-info"}>
