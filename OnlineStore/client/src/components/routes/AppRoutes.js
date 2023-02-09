@@ -17,12 +17,12 @@ const AppRoutes = () => {
         <Routes>
             {user.isAuth && authRoutes.map(({path, Component}) =>
                     <Route key={path} path={path} exact element={<Component/>}/> // настройка пути с последующей маршрутизацией и валидацией на авторизированного пользователя
-                // (ключ нужен для того, чтобы показать, что все пути уникальны)
+                                                                                 // (ключ нужен для того, чтобы показать, что все пути уникальны)
             )}
 
             {publicRoutes.map(({path, Component}) =>
                     <Route key={path} path={path} exact element={<Component/>}/> // настройка пути с последующей маршрутизацией без валидацией на авторизированного пользователя
-                // (ключ нужен для того, чтобы показать, что все пути уникальны)
+                                                                                 // (ключ нужен для того, чтобы показать, что все пути уникальны)
             )}
 
             <Route path="*" element={<Navigate to={NOTFOUND_ROUTE} replace/>}/>

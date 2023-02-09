@@ -3,7 +3,7 @@ const {DataTypes} = require('sequelize')
 
 const User = sequelize.define('user', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    userName: {type: DataTypes.STRING},
+    userName: {type: DataTypes.STRING, unique: true},
     userEmail: {type: DataTypes.STRING, unique: true},
     userPassword: {type: DataTypes.STRING},
     fio: {type: DataTypes.STRING},
@@ -25,7 +25,8 @@ const Device = sequelize.define('device', {
     nameDevice: {type: DataTypes.STRING, unique: true, allowNull: false},
     priceDevice: {type: DataTypes.INTEGER, allowNull: false},
     rating: {type: DataTypes.INTEGER, defaultValue: 0},
-    img: {type: DataTypes.STRING, allowNull: false}
+    img: {type: DataTypes.STRING, allowNull: false},
+    descriptionDevice: {type: DataTypes.STRING, allowNull: true}
 })
 
 const Brand = sequelize.define('brand', {
@@ -51,7 +52,6 @@ const DeviceInfo = sequelize.define('device_info', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     titleInfo: {type: DataTypes.STRING, allowNull: false},
     descriptionInfo: {type: DataTypes.STRING, allowNull: false},
-    descriptionDevice: {type: DataTypes.STRING, allowNull: true}
 })
 
 const Status = sequelize.define('status', {

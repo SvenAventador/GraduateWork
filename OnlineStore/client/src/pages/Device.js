@@ -5,15 +5,19 @@ import {useParams} from "react-router-dom";
 import {getOneDevice} from "../http/deviceAPI";
 import {createCartItem} from "../http/cartAPI";
 import {Context} from "../index";
+import Swal from "sweetalert2";
 
 const Device = () => {
     const {cart} = useContext(Context)
     const [device, setDevice] = useState({info: []})
     const {id} = useParams()
+    const userId = parseInt(JSON.parse(atob(localStorage.getItem('token').split('.')[1])).id)
 
     useEffect(() => {
         getOneDevice(id).then(data => setDevice(data))
     }, [id])
+
+    console.log(userId, id)
 
     return (
         <div className={"phone-info"}>
@@ -56,8 +60,12 @@ const Device = () => {
                                      className={'phone-info__additionally--favourite'}/>
                                 <button className="phone-info__additionally--buy btn-reset"
                                 onClick={() => {
-                                    createCartItem(cart.cartId, id).then(data => {
-                                        alert(data.message)
+                                    createCartItem(userId, parseInt(id)).then(data => {
+                                        return Swal.fire({
+                                            icon: 'success',
+                                            title: 'Ваушки!',
+                                            text: data.message
+                                        })
                                     })
                                 }}>
                                     Добавить в корзину

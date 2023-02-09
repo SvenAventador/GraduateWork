@@ -27,7 +27,7 @@ const DeviceItem = ({device, deviceBrandId}) => {
                 </h3>
 
                 <div className="device__rating flex">
-                    <h3 className="device__rating--rate" style={{marginRight: 5 + 'px'}}>{device.rating}</h3>
+                    <h3 className="device__rating--rate">{device.rating}</h3>
                     <img src={star}
                          alt="Star image"
                          aria-label={"Star label"}

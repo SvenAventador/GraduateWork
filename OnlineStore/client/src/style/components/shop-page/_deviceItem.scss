@@ -21,6 +21,13 @@
   }
 
   &__rating {
+    align-items: center;
+    margin-right: 5px;
+
+    &--rate:not(:last-child) {
+      margin-right: 5px;
+    }
+
     &--star {
       width: 20px;
       height: 20px;
@@ -29,14 +36,15 @@
 
   &__price {
     color: #C6BCBD;
+    font-size: 16px;
   }
 
   &__add {
     text-align: center;
 
     &--btn {
-      background-color: #56BDC5;
-      color: #FFFFFF;
+      background-color: var(--accientColor);
+      color: var(--whiteColor);
       border-radius: 30px;
       padding: 10px 30px;
       margin: 10px 0;

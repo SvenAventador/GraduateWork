@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import search from "../../resources/img/header_buttons/search.png"
 import auth from "../../resources/img/header_buttons/auth.png";
 import cart from "../../resources/img/header_buttons/cart.png";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import {CART_ROUTE, LOGIN_ROUTE, SHOP_ROUTE} from "../../utils/consts";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
@@ -10,6 +10,8 @@ import {observer} from "mobx-react-lite";
 const LowHeader = observer(() => {
 
     const {user} = useContext(Context)
+    const userId = parseInt(JSON.parse(atob(localStorage.getItem('token').split('.')[1])).id)
+    const history = useNavigate()
 
     /**
      * Функция выхода из аккаунта.
@@ -55,7 +57,7 @@ const LowHeader = observer(() => {
                 </button>
             </form>
 
-            <NavLink to={CART_ROUTE} className={"low-header__cart flex"}>
+            <NavLink to={CART_ROUTE + `/${userId}`} className={"low-header__cart flex"}>
                 <div className={"low-header__cart--img"}>
                     <img src={cart} alt="cart" aria-label={"Cart"}/>
                 </div>
@@ -64,7 +66,7 @@ const LowHeader = observer(() => {
             {
                 user._isAuth ?
                     <button className={"low-header__auth flex btn-reset"}
-                            onClick={() => logOut()}>
+                            onClick={() => logOut() && history(SHOP_ROUTE)}>
                         <div className={"low-header__auth--img"}>
                             <img src={auth} alt="auth" aria-label={"auth"}/>
                         </div>

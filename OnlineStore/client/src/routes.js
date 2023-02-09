@@ -35,7 +35,7 @@ import NotFoundPage from "./pages/NotFound/NotFoundPage";
  */
 export const authRoutes = [
     {
-        path: CART_ROUTE,
+        path: CART_ROUTE + '/:id',
         Component: Cart
     },
     {

@@ -28,27 +28,22 @@ const TypeList = observer(() => {
     }
 
     return (
-        <ListGroup>
-            {device.type.map(types =>
-                <ListGroup.Item
-                    style={{cursor: 'pointer'}}
-                    active={types.id === device.selectedTypes.id}
-                    onClick={() => device.setSelectedTypes(types)}
-                    key={types.id}
-                >
-                    {types.nameType}
-                </ListGroup.Item>
-            )}
-
-            <ListGroup.Item
-                style={{cursor: 'pointer', background: '#56BDC5'}}
-                onClick={() => {
-                    device.setSelectedTypes({})
-                }}
-            >
-                Очистить фильтры
-            </ListGroup.Item>
-        </ListGroup>
+        <div className={"typebar"}>
+            <h3 className="typebar__h3--title">Типы устройств</h3>
+            <ul className={"typebar__list"}>
+                {device.type.map(types =>
+                    <li className={"typebar__list--item"}
+                        onClick={() => device.setSelectedTypes(types)}
+                        key={types.id}>
+                        {types.nameType}
+                    </li>
+                )}
+            </ul>
+            <div className="typebar__btn">
+                <button className="typebar__btn--show"
+                        onClick={showMoreButton}>Показать еще</button>
+            </div>
+        </div>
     );
 });
 

@@ -71,7 +71,7 @@ class CartController {
             }
 
             await CartDevice.create({cartId, deviceId})
-            return res.status(200).json({message: `Товар успешно добавлен в корзину! ${cartId} ${deviceId}`})
+            return res.status(200).json({message: `Товар успешно добавлен в корзину!`})
         } catch {
             next(ErrorHandler.internal('Неправильно обработан запрос.'))
         }
@@ -95,9 +95,9 @@ class CartController {
             const candidate = await CartDevice.findOne({where: {cartId, deviceId}})
             if (candidate) {
                 await candidate.destroy()
-                return res.status(200).json({message: `Товар успешно удален из корзины! ${cartId}  ${deviceId}`})
+                return res.status(200).json({message: 'Товар успешно удален из корзины!'})
             } else {
-                return next(ErrorHandler.badRequest(`Данный товар не найден в корзине. ${cartId}  ${deviceId}`))
+                return next(ErrorHandler.badRequest('Данный товар не найден в корзине'))
             }
         } catch {
             next(ErrorHandler.internal(`Неправильно обработан запрос.`))

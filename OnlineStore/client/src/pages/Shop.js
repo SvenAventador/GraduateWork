@@ -13,6 +13,7 @@ const Shop = observer(() => {
 
     const {device, user, cart} = useContext(Context)
     const userId = parseInt(JSON.parse(atob(localStorage.getItem('token').split('.')[1])).id)
+
     useEffect(() => {
         if(user.isAuth){
             getCartId(userId).then(cartId => {
@@ -21,17 +22,19 @@ const Shop = observer(() => {
         }
     }, [user.isAuth, userId, cart])
 
+    console.log(userId)
+
     useEffect(() => {
         getAllTypes().then(data => device.setType(data))
         getAllBrand().then(data => device.setBrand(data))
-        getAllDevices(null, null, 1, 5).then(data => {
+        getAllDevices(null, null, 1, 6).then(data => {
             device.setDevice(data.rows)
             device.setTotalCount(data.count)
         })
     }, [device])
 
     useEffect(() => {
-        getAllDevices(device.selectedBrand.id, device.selectedTypes.id, device.page, 5).then(data => {
+        getAllDevices(device.selectedBrand.id, device.selectedTypes.id, device.page, 6).then(data => {
             device.setDevice(data.rows)
             device.setTotalCount(data.count)
         })
@@ -40,9 +43,18 @@ const Shop = observer(() => {
 
     return (
         <div className={'shop-section flex'}>
-            <div className="shop-section__row__left">
+            <div className="shop-section__row--left">
                 <TypeList />
                 <BrandList />
+
+                <div className="shop-section__btn">
+                    <button className="shop-section__btn--clear btn-reset"
+                            onClick={() => {
+                                device.setSelectedBrands({})
+                                device.setSelectedTypes({})
+                            }}>Очистить фильтры</button>
+                </div>
+
             </div>
             <div className="pagination grid">
                 <div className={"shop-section__row--right flex"}>

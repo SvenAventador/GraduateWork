@@ -5,7 +5,7 @@ import {Pagination} from "react-bootstrap";
 
 const Page = observer(() => {
     const {device} = useContext(Context)
-    const pageCount = Math.ceil(device.totalCount / device.limit)
+    const pageCount = (device.totalCount / device.limit)
     const pages = []
 
     for (let i = 0; i < pageCount; i++) {
@@ -13,16 +13,18 @@ const Page = observer(() => {
     }
 
     return (
-        <Pagination className="d-flex justify-content-center mt-3">
-            {pages.map(page =>
-                <Pagination.Item
-                    key={page}
-                    active={device.page === page}
-                    onClick={() => device.setPage(page)}
-                >
-                    {page}
-                </Pagination.Item>
-            )}
+        <Pagination className="pagination__list flex">
+            <div className="pagination__item flex">
+                {pages.map(page =>
+                    <Pagination.Item
+                        key={page}
+                        active={device.page === page}
+                        onClick={() => device.setPage(page)}
+                    >
+                        {page}
+                    </Pagination.Item>
+                )}
+            </div>
         </Pagination>
     );
 });

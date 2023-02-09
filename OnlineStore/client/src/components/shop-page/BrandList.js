@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
-import {ListGroup} from "react-bootstrap";
 
 const BrandList = observer(() => {
     const {device} = useContext(Context)
@@ -11,7 +10,7 @@ const BrandList = observer(() => {
      */
     const showMoreButton = () => {
         const showMore = document.querySelector('.brandbar__btn--show')
-        const typeLength = document.querySelectorAll('.brandbar__list--item').length
+        const brandLength = document.querySelectorAll('.brandbar__list--item').length
         let item = 3
 
         showMore.addEventListener('click', () => {
@@ -21,34 +20,29 @@ const BrandList = observer(() => {
 
             visibleItem.forEach(element => element.classList.add('is-visible'))
 
-            if (visibleItem.length === typeLength) {
+            if (visibleItem.length === brandLength) {
                 showMore.style.display = 'none'
             }
         })
     }
 
     return (
-        <ListGroup>
-            {device.brand.map(brands =>
-                <ListGroup.Item
-                    style={{cursor: 'pointer'}}
-                    active={brands.id === device.selectedBrand.id}
-                    onClick={() => device.setSelectedBrands(brands)}
-                    key={brands.id}
-                >
-                    {brands.nameBrand}
-                </ListGroup.Item>
-            )}
-
-            <ListGroup.Item
-                style={{cursor: 'pointer', background: '#56BDC5'}}
-                onClick={() => {
-                    device.setSelectedBrands({})
-                }}
-            >
-                Очистить фильтры
-            </ListGroup.Item>
-        </ListGroup>
+        <div className={"brandbar"}>
+            <h3 className="brandbar__h3--title">Бренды устройств</h3>
+            <ul className={"brandbar__list"}>
+                {device.brand.map(brands =>
+                    <li className={"brandbar__list--item"}
+                        onClick={() => device.setSelectedBrands(brands)}
+                        key={brands.id}>
+                        {brands.nameBrand}
+                    </li>
+                )}
+            </ul>
+            <div className="brandbar__btn">
+                <button className="brandbar__btn--show"
+                        onClick={showMoreButton}>Показать еще</button>
+            </div>
+        </div>
     );
 });
 

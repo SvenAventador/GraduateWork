@@ -51,8 +51,8 @@
     }
 
     &--buy {
-      background-color: #56BDC5;
-      color: #FFFFFF;
+      background-color: var(--accientColor);
+      color: var(--whiteColor);
       border-radius: 30px;
       padding: 10px 30px;
       margin: 10px 0;
@@ -68,6 +68,9 @@
   }
 
   &__bottom {
+    margin-top: 40px;
+    margin-bottom: 60px;
+
     &--title {
       font-family: 'Manrope', sans-serif;
       font-size: 30px;
@@ -78,7 +81,7 @@
       font-family: 'Manrope', sans-serif;
       font-size: 25px;
       color: #777780;
-      margin-right: 500px;
+      margin-right: 378px;
       justify-content: space-between;
 
       &-title {
