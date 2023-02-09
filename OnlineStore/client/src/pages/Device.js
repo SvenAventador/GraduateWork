@@ -72,7 +72,7 @@ const Device = () => {
                                 </button>
                             </div>
                             <div className="phone-info__additionally--descr">
-                                {/*TODO описание товара перенести в таблицу Devices*/}
+                                {device.descriptionDevice}
                             </div>
                         </div>
                     </div>
